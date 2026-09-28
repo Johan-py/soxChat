@@ -7,8 +7,8 @@ services:
     name: soxchat-server
     runtime: node
     plan: free
-    buildCommand: npm install && npm run build
-    startCommand: npm start
+    buildCommand: pnpm install --frozen-lockfile && pnpm run build
+    startCommand: pnpm start
     envVars:
       - key: NODE_ENV
         value: production
@@ -40,7 +40,7 @@ services:
     name: soxchat-client
     runtime: static
     plan: free
-    buildCommand: npm install && npm run build
+    buildCommand: pnpm install --frozen-lockfile && pnpm run build
     staticPublishPath: ./dist
     envVars:
       - key: VITE_API_URL

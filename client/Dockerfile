@@ -3,14 +3,17 @@ FROM node:22-alpine AS builder
 
 WORKDIR /app
 
-COPY package*.json ./
-RUN npm ci
+# Install pnpm
+RUN corepack enable && corepack prepare pnpm@latest --activate
+
+COPY package.json pnpm-lock.yaml ./
+RUN pnpm install --frozen-lockfile
 
 COPY tsconfig.json ./
 COPY index.html ./
 COPY src ./src
 
-RUN npm run build
+RUN pnpm run build
 
 # Production stage: serve with Caddy
 FROM caddy:2-alpine AS production
