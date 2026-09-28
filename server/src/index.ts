@@ -15,12 +15,16 @@ import { RoomManager, Room, Participant } from './room.js';
 import { RateLimiter } from './ratelimit.js';
 import { FileStore } from './fileStore.js';
 import securityHeaders from './security.js';
+import corsPlugin from './cors.js';
 
 const config = loadConfig();
 const app = Fastify({ logger: false });
 
 // Register security headers plugin
 await app.register(securityHeaders);
+
+// Register CORS for cross-origin frontend (Vercel + Render)
+await app.register(corsPlugin);
 
 const tempDir = mkdtempSync(join(tmpdir(), 'soxchat-'));
 const roomManager = new RoomManager(config);

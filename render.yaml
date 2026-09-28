@@ -1,12 +1,12 @@
-# Render Blueprint — SoxChat
-# Infraestructura como código para despliegue en Render.com
+# Render Blueprint — SoxChat Backend Only
+# Frontend is deployed separately on Vercel
 
 services:
   # Backend: Fastify + WebSocket
   - type: web
     name: soxchat-server
     runtime: node
-    plan: free
+    plan: starter
     buildCommand: pnpm install --frozen-lockfile && pnpm run build
     startCommand: pnpm start
     envVars:
@@ -34,20 +34,3 @@ services:
         value: 30
       - key: RATE_LIMIT_WS_CONNECT_WINDOW_MS
         value: 60000
-
-  # Frontend: Static site (Vite build)
-  - type: web
-    name: soxchat-client
-    runtime: static
-    plan: free
-    buildCommand: pnpm install --frozen-lockfile && pnpm run build
-    staticPublishPath: ./dist
-    envVars:
-      - key: VITE_API_URL
-        value: https://soxchat-server.onrender.com
-      - key: VITE_WS_URL
-        value: wss://soxchat-server.onrender.com
-    routes:
-      - type: rewrite
-        source: /*
-        destination: /index.html
