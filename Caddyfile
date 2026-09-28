@@ -1,0 +1,32 @@
+# Caddyfile for SoxChat
+# TLS is automatic with Let's Encrypt in production.
+# For local testing, use a self-signed cert or run without TLS.
+
+{
+	# Global options
+	auto_https off
+}
+
+# Production domain (replace with your domain)
+# soxchat.example.com {
+# 	reverse_proxy /api/* server:3000
+# 	reverse_proxy /ws/* server:3000
+# 	reverse_proxy client:80
+# }
+
+# Local development (HTTP only)
+:80 {
+	# API and WebSocket
+	handle /api/* {
+		reverse_proxy server:3000
+	}
+
+	handle /ws/* {
+		reverse_proxy server:3000
+	}
+
+	# Static files
+	handle {
+		reverse_proxy client:80
+	}
+}

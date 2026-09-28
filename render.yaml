@@ -1,0 +1,53 @@
+# Render Blueprint — SoxChat
+# Infraestructura como código para despliegue en Render.com
+
+services:
+  # Backend: Fastify + WebSocket
+  - type: web
+    name: soxchat-server
+    runtime: node
+    plan: free
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: ROOM_TTL_MS
+        value: 3600000
+      - key: MAX_ROOMS
+        value: 1000
+      - key: MAX_PARTICIPANTS_PER_ROOM
+        value: 20
+      - key: MAX_MESSAGE_BYTES
+        value: 4096
+      - key: MAX_FILE_BYTES
+        value: 10485760
+      - key: CHUNK_SIZE
+        value: 65536
+      - key: RATE_LIMIT_ROOM_CREATE_MAX
+        value: 10
+      - key: RATE_LIMIT_ROOM_CREATE_WINDOW_MS
+        value: 60000
+      - key: RATE_LIMIT_WS_CONNECT_MAX
+        value: 30
+      - key: RATE_LIMIT_WS_CONNECT_WINDOW_MS
+        value: 60000
+
+  # Frontend: Static site (Vite build)
+  - type: web
+    name: soxchat-client
+    runtime: static
+    plan: free
+    buildCommand: npm install && npm run build
+    staticPublishPath: ./dist
+    envVars:
+      - key: VITE_API_URL
+        value: https://soxchat-server.onrender.com
+      - key: VITE_WS_URL
+        value: wss://soxchat-server.onrender.com
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html

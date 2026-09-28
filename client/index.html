@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SoxChat</title>
+  <link rel="stylesheet" href="/src/style.css" />
+</head>
+<body>
+  <div id="app">
+    <!-- Landing: create or join -->
+    <section id="landing" class="screen">
+      <h1>SoxChat</h1>
+      <p class="subtitle">Chat cifrado extremo a extremo y efímero</p>
+      <div class="actions">
+        <button id="btn-create" class="btn-primary">Crear sala</button>
+        <div class="join-form">
+          <input id="join-url" type="url" placeholder="Pega el enlace de invitación..." />
+          <button id="btn-join" class="btn-secondary">Unirse</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Nick entry -->
+    <section id="nick-entry" class="screen hidden">
+      <h2>Tu nick temporal</h2>
+      <input id="nick-input" type="text" maxlength="32" placeholder="Nick (máx 32 caracteres)" />
+      <button id="btn-enter" class="btn-primary">Entrar a la sala</button>
+    </section>
+
+    <!-- Chat -->
+    <section id="chat" class="screen hidden">
+      <header>
+        <div class="room-info">
+          <span id="room-id-display"></span>
+          <span id="room-timer"></span>
+        </div>
+        <div class="participants" id="participants"></div>
+        <button id="btn-destroy" class="btn-danger">Destruir sala</button>
+      </header>
+      <main id="messages"></main>
+      <footer>
+        <input id="msg-input" type="text" placeholder="Mensaje..." autocomplete="off" />
+        <button id="btn-send" class="btn-primary">Enviar</button>
+        <input id="file-input" type="file" style="display:none" />
+        <button id="btn-file" class="btn-secondary">Archivo</button>
+      </footer>
+    </section>
+  </div>
+  <script type="module" src="/src/main.ts"></script>
+</body>
+</html>

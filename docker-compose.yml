@@ -1,0 +1,46 @@
+services:
+  server:
+    build: ./server
+    environment:
+      - PORT=3000
+      - HOST=0.0.0.0
+      - ROOM_TTL_MS=3600000
+      - MAX_ROOMS=1000
+      - MAX_PARTICIPANTS_PER_ROOM=20
+      - MAX_MESSAGE_BYTES=4096
+      - MAX_FILE_BYTES=10485760
+      - CHUNK_SIZE=65536
+      - RATE_LIMIT_ROOM_CREATE_MAX=10
+      - RATE_LIMIT_ROOM_CREATE_WINDOW_MS=60000
+      - RATE_LIMIT_WS_CONNECT_MAX=30
+      - RATE_LIMIT_WS_CONNECT_WINDOW_MS=60000
+    networks:
+      - soxchat
+    restart: unless-stopped
+
+  client:
+    build: ./client
+    networks:
+      - soxchat
+    restart: unless-stopped
+
+  caddy:
+    image: caddy:2-alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    networks:
+      - soxchat
+    restart: unless-stopped
+
+networks:
+  soxchat:
+    driver: bridge
+
+volumes:
+  caddy_data:
+  caddy_config:
